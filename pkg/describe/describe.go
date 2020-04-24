@@ -4863,6 +4863,9 @@ func backendStringer(backend *networkingv1beta1.IngressBackend) string {
 
 // findNodeRoles returns the roles of a given node.
 // The roles are determined by looking for:
+// * a role.node.kubernetes.io/<role>="" label
+// * a kubelet.kubernetes.io/role="<role>" label
+// Compatible for old kubelet version:
 // * a node-role.kubernetes.io/<role>="" label
 // * a kubernetes.io/role="<role>" label
 func findNodeRoles(node *corev1.Node) []string {
@@ -4874,7 +4877,15 @@ func findNodeRoles(node *corev1.Node) []string {
 				roles.Insert(role)
 			}
 
+		case strings.HasPrefix(k, DeprecatedLabelNodeRolePrefix):
+			if role := strings.TrimPrefix(k, DeprecatedLabelNodeRolePrefix); len(role) > 0 {
+				roles.Insert(role)
+			}
+
 		case k == NodeLabelRole && v != "":
+			roles.Insert(v)
+
+		case k == DeprecatedNodeLabelRole && v != "":
 			roles.Insert(v)
 		}
 	}

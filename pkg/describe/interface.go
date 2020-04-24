@@ -28,10 +28,12 @@ const (
 
 	// LabelNodeRolePrefix is a label prefix for node roles
 	// It's copied over to here until it's merged in core: https://github.com/kubernetes/kubernetes/pull/39112
-	LabelNodeRolePrefix = "node-role.kubernetes.io/"
+	LabelNodeRolePrefix           = "role.node.kubernetes.io/"
+	DeprecatedLabelNodeRolePrefix = "node-role.kubernetes.io/"
 
 	// NodeLabelRole specifies the role of a node
-	NodeLabelRole = "kubernetes.io/role"
+	NodeLabelRole           = "kubelet.kubernetes.io/role"
+	DeprecatedNodeLabelRole = "kubernetes.io/role"
 )
 
 // DescriberFunc gives a way to display the specified RESTMapping type
